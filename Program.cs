@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SemaineDevOps.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<SemaineDevOpsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SemaineDevOpsContext") ?? throw new InvalidOperationException("Connection string 'SemaineDevOpsContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

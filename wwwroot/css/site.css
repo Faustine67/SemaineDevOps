@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -19,4 +19,58 @@ html {
 
 body {
   margin-bottom: 60px;
+}*/
+
+table, td {
+    border: 2px solid black !important;
 }
+
+
+    td:nth-child(2) {
+        width: 80px;
+    }
+
+    td:nth-child(n+3) {
+        width: 13%;
+    }
+
+.questionnaire-td:nth-child(2) {
+    width: 100px !important;
+}
+
+
+
+.green {
+    background-color: aquamarine;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.red {
+    background-color: lightcoral;
+}
+
+
+
+.selected {
+    background-color: #DDDDDD;
+}
+
+table {
+    width: 100%;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 1rem;
+}
+
+#containerCreation {
+    display: none;
+}
+
+    #containerCreation.active {
+        display: inline;
+    }
