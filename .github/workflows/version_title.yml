@@ -1,0 +1,109 @@
+name: PR Title Validation and Version Update
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  validate_pr_title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Extract PR title
+        id: pr_info
+        run: |
+          echo "::set-output name=title::$(jq -r '.pull_request.title' $GITHUB_EVENT_PATH)"
+
+      - name: Validate PR title
+        run: |
+          title="${{ steps.pr_info.outputs.title }}"
+          if [[ $title =~ Release ]]; then
+            echo "La Pull Request contient le mot-clé Release. Arrêt du processus."
+            exit 0
+          elif [[ ! $title =~ (Majeur|Mineur|Patch) ]]; then
+            echo "Le titre de la Pull Request ne contient pas les mots-clés Majeur, Mineur ou Patch."
+            echo "Veuillez inclure l'un de ces mots-clés dans le titre de votre Pull Request."
+            exit 1
+          fi
+
+  update_version:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'synchronize'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Extract version from last PR title
+        id: extract_version
+        run: |
+          latest_pr_titles=$(curl -s -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls?state=closed&sort=updated&direction=desc&per_page=100" | jq -r '.[].title')
+          version=""
+          for title in $latest_pr_titles; do
+            version=$(echo "$title" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+            if [[ ! -z "$version" ]]; then
+              break
+            fi
+          done
+          if [[ -z "$version" ]]; then
+            version="1.0.0"
+          fi
+          echo "::set-output name=version::$version"
+
+      - name: Extract PR title and labels
+        id: pr_info
+        run: |
+          echo "::set-output name=title::$(jq -r '.pull_request.title' $GITHUB_EVENT_PATH)"
+          echo "::set-output name=labels::$(jq -r '.pull_request.labels[].name' $GITHUB_EVENT_PATH)"
+
+      - name: Update version and PR title
+        run: |
+          # Récupérer le titre de la PR et les labels
+          title="${{ steps.pr_info.outputs.title }}"
+          echo "$title" > title.txt
+          
+          # Récupérer la dernière version de la PR
+          version="${{ steps.extract_version.outputs.version }}"
+
+          # Écrire la version dans un fichier de sortie
+          echo "$version" > version.txt
+        continue-on-error: true
+
+      - name: Debug new title values
+        run: |
+          # Lire la version depuis le fichier de sortie
+          version=$(cat version.txt)
+          title=$(cat title.txt)
+          
+          # Vérifier si les mots-clés sont présents dans le titre
+          if [[ $title == *"Majeur"* ]]; then
+              version=$(echo $version | awk -F. '{$1++; $2=0; $3=0} 1' OFS=.)
+          elif [[ $title == *"Mineur"* ]]; then
+              version=$(echo $version | awk -F. '{$2++; $3=0} 1' OFS=.)
+          elif [[ $title == *"Patch"* ]]; then
+              version=$(echo $version | awk -F. '{$3++} 1' OFS=.)
+          fi
+
+
+          # Mettre à jour le titre de la PR avec la nouvelle version
+          new_title="${version} - ${title}"
+          
+          # Enregistrer la nouvelle valeur de new_title dans un fichier de sortie
+          echo "$new_title" > new_title.txt
+
+
+      - name: Update PR title
+        run: |
+          # Lire la nouvelle valeur de new_title depuis le fichier de sortie
+          new_title=$(cat new_title.txt)
+          
+          # Récupérer le numéro de la PR
+          pr_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          
+          # Mettre à jour le titre de la PR via l'API GitHub
+          curl -X PATCH \
+            -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"title\": \"$new_title\"}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${pr_number}"
