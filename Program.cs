@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SemaineDevOps.Data;
+//using SemaineDevOps.Data;
+using SemaineDevOps.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SemaineDevOpsContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SemaineDevOpsContext") ?? throw new InvalidOperationException("Connection string 'SemaineDevOpsContext' not found.")));
