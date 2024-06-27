@@ -39,6 +39,9 @@ namespace SemaineDevOps.Controllers
                             .ThenInclude(c => c.Axe)
                 .Include(e => e.Regroupers)
                     .ThenInclude(r => r.Reponse)
+                 .Include(e => e.Regroupers)
+                    .ThenInclude(r => r.Question)
+                        .ThenInclude(q => q.Points)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (entreprise == null)
             {

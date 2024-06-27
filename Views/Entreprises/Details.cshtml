@@ -63,26 +63,26 @@
             @foreach (var regrouper in Model.Regroupers)
             {
                 var question = regrouper.Question;
-                if (question != null)
+                var reponse = regrouper.Reponse;
+                    if (question != null)
                 {
                     var categorie = question.Categorie;
                     if (categorie != null)
                     {
                         var axe = categorie.Axe;
-                            foreach (var point in question.Points)
-                            {
+                        foreach (var point in question.Points)
+                           {
                             <tr>
                                     <td>@categorie.Nom</td>
                                     <td>@question.Nom</td>
-                                    <td>@regrouper.Reponse.Score</td> 
-                                    <td>@point.Descriptif</td> 
-                                    <td>@regrouper.Reponse.Commentaire</td>
+                                    <td>@reponse.Score</td>
+                                    <td>@point.Descriptif</td>
+                                    <td>@reponse.Commentaire</td>
                             </tr>
+                            }
                             }
                     }
                 }
-
-            }
           </tbody>
           </table>
     </div>
