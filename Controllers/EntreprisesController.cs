@@ -33,6 +33,12 @@ namespace SemaineDevOps.Controllers
             }
 
             var entreprise = await _context.Entreprises
+                .Include(e=>e.Regroupers)
+                    .ThenInclude(r => r.Question)
+                        .ThenInclude(q => q.Categorie)
+                            .ThenInclude(c => c.Axe)
+                .Include(e => e.Regroupers)
+                    .ThenInclude(r => r.Reponse)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (entreprise == null)
             {

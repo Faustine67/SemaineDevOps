@@ -4,11 +4,11 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@* <h1>Details</h1> *@
 
 <div>
-    <h4>Entreprise</h4>
-    <hr />
+  @*   <h4>Entreprise</h4>
+    <hr /> *@
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nom)
@@ -42,51 +42,73 @@
         </dd>
     </dl>
 </div>
+@* <div class="tabs">
+    <button class="tab-link active" data-tab="tab1">Axe Compétences</button>
+    <button class="tab-link" data-tab="tab2">Axe Réactivité</button>
+    <button class="tab-link" data-tab="tab3">Axe Numérique</button>
+    <button class="tab-link" data-tab="tab4">Synthèse</button>
+</div> *@
+
+ <div class="container my-5">
+    <div id="tab1" class="tab-content active">
+    <table>
+        <thead>
+            <th>Categorie</th>
+            <th>Question</th>
+            <th>Score</th>
+            <th>Description</th>
+            <th>Commentaire</th>
+        </thead>
+          <tbody>
+            @foreach (var regrouper in Model.Regroupers)
+            {
+                var question = regrouper.Question;
+                if (question != null)
+                {
+                    var categorie = question.Categorie;
+                    if (categorie != null)
+                    {
+                        var axe = categorie.Axe;
+                            foreach (var point in question.Points)
+                            {
+                            <tr>
+                                    <td>@categorie.Nom</td>
+                                    <td>@question.Nom</td>
+                                    <td>@regrouper.Reponse.Score</td> 
+                                    <td>@point.Descriptif</td> 
+                                    <td>@regrouper.Reponse.Commentaire</td>
+                            </tr>
+                            }
+                    }
+                }
+
+            }
+          </tbody>
+          </table>
+    </div>
+
+</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 
-@* <div class="container my-5">
-    <h2 class="my-3"> Axe 1</h2>
-    <h4>Catégorie 1</h4>
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                Question 1    
-                </td>
-                <td>
-                    0
-                </td>
-                <td>
-                    Possibilité de choisir et de suivre des formations "annexes" au métier et/ou temps dédié pour de la veille ou de l'auto-formation
-                </td>
-                <td>
-                    Nombreuses formations métiers dans le plan de formation
-                </td>
-                <td>
-                    Désintérêt pour l'amélioration de la compétence des équipes
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Question 1
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    Démarche instaurée et pratiquée régulièrement
-                </td>
-                <td>
-                    Quelques initiatives
-                </td>
-                <td>
-                    Pas du tout
-                </td>
-            </tr>
-        </tbody>
-    </table>
+@* <script>
+    document.querySelectorAll('.tab-link').forEach(button => {
+        button.addEventListener('click', () => {
+            const tabContainer = button.parentElement.parentElement;
+            const tabNumber = button.dataset.tab;
 
-</div> *@
+            tabContainer.querySelectorAll('.tab-link').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            tabContainer.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            button.classList.add('active');
+            tabContainer.querySelector('#' + tabNumber).classList.add('active');
+        });
+    });
+</script> *@
