@@ -1,0 +1,21 @@
+﻿a{
+    text-decoration: none;
+    /*border: 1px solid blue;*/
+}
+
+.ct-table-dark {
+    background-color: #2d3192 !important;
+    color: white !important;
+}
+
+.ct-table-light {
+    background-color: #5249c9 !important;
+    color: white !important;
+}
+
+.ct-table {
+    border-radius: 10px !important;
+    border-spacing: 0;
+    border-collapse: separate;
+    overflow: hidden;
+}

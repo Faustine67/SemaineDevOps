@@ -4,56 +4,56 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+<h1>Liste des entreprises</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Ajouter votre entreprise</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Domaine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Adresse)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ville)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+<table class="table ct-table">
+    <tr class="ct-table-dark">
+        <th scope="col" class="ct-table-dark">
+            @Html.DisplayNameFor(model => model.Nom)
+        </th>
+        <th scope="col" class="ct-table-dark">
+            @Html.DisplayNameFor(model => model.Domaine)
+        </th>
+        <th scope="col" class="ct-table-dark">
+            @Html.DisplayNameFor(model => model.Adresse)
+        </th>
+        <th scope="col" class="ct-table-dark">
+            @Html.DisplayNameFor(model => model.Cp)
+        </th>
+        <th scope="col" class="ct-table-dark">
+            @Html.DisplayNameFor(model => model.Ville)
+        </th>
+        <th scope="col" class="ct-table-dark"></th>
+    </tr>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Domaine)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Adresse)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ville)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr class="ct-table-light">
+                <td scope="row" class="ct-table-light">
+                    @Html.DisplayFor(modelItem => item.Nom)
+                </td>
+                <td class="ct-table-light">
+                    @Html.DisplayFor(modelItem => item.Domaine)
+                </td>
+                <td class="ct-table-light">
+                    @Html.DisplayFor(modelItem => item.Adresse)
+                </td>
+                <td class="ct-table-light">
+                    @Html.DisplayFor(modelItem => item.Cp)
+                </td>
+                <td class="ct-table-light">
+                    @Html.DisplayFor(modelItem => item.Ville)
+                </td>
+                <td class="ct-table-dark">
+                    <a style="color:white" asp-action="Details" asp-route-id="@item.Id">Synthèse</a> |
+                    <a style="color:white" asp-action="Edit" asp-route-id="@item.Id">Modifier</a>
+                    @* <a style="color:white" asp-action="Delete" asp-route-id="@item.Id">Supprimer</a> *@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
