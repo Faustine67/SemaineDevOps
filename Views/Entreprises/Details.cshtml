@@ -42,58 +42,70 @@
         </dd>
     </dl>
 </div>
-@* <div class="tabs">
-    <button class="tab-link active" data-tab="tab1">Axe Compétences</button>
-    <button class="tab-link" data-tab="tab2">Axe Réactivité</button>
-    <button class="tab-link" data-tab="tab3">Axe Numérique</button>
-    <button class="tab-link" data-tab="tab4">Synthèse</button>
-</div> *@
+@* <div class="tab-container">
+     <div class="tabs">
+        <button class="tab-link active" data-tab="tab1">Axe Compétences</button>
+        <button class="tab-link" data-tab="tab2">Axe Réactivité</button>
+        <button class="tab-link" data-tab="tab3">Axe Numérique</button>
+    @*     <button class="tab-link" data-tab="tab4">Synthèse</button>
+     </div> 
 
- <div class="container my-5">
-    <div id="tab1" class="tab-content active">
-    <table>
-        <thead>
-            <th>Categorie</th>
-            <th>Question</th>
-            <th>Score</th>
-            <th>Description</th>
-            <th>Commentaire</th>
-        </thead>
-          <tbody>
-            @foreach (var regrouper in Model.Regroupers)
-            {
-                var question = regrouper.Question;
-                var reponse = regrouper.Reponse;
-                    if (question != null)
+        <div id="tab1" class="tab-content active">
+        <table>
+            <thead>
+                <tr>
+                <th></th>
+                <th>Question</th>
+                <th>Score</th>
+                <th>Descriptif 1</th>
+                <th>Descriptif 2</th>
+                <th>Descriptif 3</th>
+           @*      <th>Description</th> 
+                <th>Commentaire</th>
+                </tr>
+            </thead>
+              <tbody>
+                  <tr>
+                @foreach (var regrouper in Model.Regroupers)
                 {
-                    var categorie = question.Categorie;
-                    if (categorie != null)
+                    var question = regrouper.Question;
+                    var reponse = regrouper.Reponse;
+                        if (question != null)
                     {
-                        var axe = categorie.Axe;
-                        foreach (var point in question.Points)
-                           {
-                            <tr>
-                                    <td>@categorie.Nom</td>
-                                    <td>@question.Nom</td>
-                                    <td>@reponse.Score</td>
-                                    <td>@point.Descriptif</td>
-                                    <td>@reponse.Commentaire</td>
-                            </tr>
-                            }
-                            }
-                    }
-                }
-          </tbody>
-          </table>
-    </div>
+                        var categorie = question.Categorie;
+                        if (categorie != null)
+                        {
+                            var axe = categorie.Axe;
+                                var descriptifs = question.Points.Select(p => p.Descriptif).ToList();
+                          
+                              @*   foreach (var point in question.Points)
+                               { 
+                               
+                                        <td>@categorie.Nom</td>
+                                        <td>@question.Nom</td>
+                                        <td>@reponse.Score</td>
+                                        <td>@descriptifs[0]</td>
+                                        <td>@descriptifs[1]</td>
+                                        <td>@descriptifs[2]</td>
+    @*                                     <td>@point.Descriptif</td>
+                                  <td>@reponse.Commentaire</td>
+                                }
+                                }
+                        }
+                  </tr>
+                
+              </tbody>
+              </table>
+        </div>
 
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-
-@* <script>
+    </div>
+ <script>
     document.querySelectorAll('.tab-link').forEach(button => {
         button.addEventListener('click', () => {
             const tabContainer = button.parentElement.parentElement;
@@ -111,4 +123,105 @@
             tabContainer.querySelector('#' + tabNumber).classList.add('active');
         });
     });
-</script> *@
+</script> @**@
+
+<div class="container my-5">
+            <h2 class="my-3"> Axe Compétences</h2>
+            <h4>Excellence Technique/Communauté de pratiques</h4>
+            <table >
+               <tbody>
+                  <tr >
+                     <td>
+                        Formations pour Apprendre à apprendre, changement de paradigme, "être à la page" (au-delà des compétences "justes" nécessaires)
+                     </td>
+                     <td>
+                        0
+                     </td>
+                     <td>
+                        Possibilité de choisir et de suivre des formations "annexes" au métier et/ou temps dédié pour de la veille ou de l'auto-formation
+                     </td>
+                     <td>
+                        Nombreuses formations métiers dans le plan de formation
+                     </td>
+                     <td>
+                        Désintérêt pour l'amélioration de la compétence des équipes
+                     </td>
+                     <!-- <td style="background-color: aliceblue;" title="Possibilité de choisir et de suivre des formations 'annexes' au métier et/ou temps dédié pour de la veille ou de l'auto-formation">
+                        <input type="radio">2 point
+                        </td>
+                        <td style="background-color: aliceblue;" title="Nombreuses formations métiers dans le plan de formation">
+                        <input type="radio">1 point
+                        </td>
+                        <td style="background-color: aliceblue;" title="Désintérêt pour l'amélioration de la compétence des équipes">
+                        <input type="radio">0 point
+                        </td> -->
+                  </tr>
+                  <tr >
+                     <td>
+                        Le co-développement (outil d'intelligence collective) existe-t-il dans l'entreprise ?
+                     </td>
+                     <td>
+                        1
+                     </td>
+                     <td>
+                        Démarche instaurée et pratiquée régulièrement
+                     </td>
+                     <td>
+                        Quelques initiatives
+                     </td>
+                     <td>
+                        Pas du tout
+                     </td>
+                     <!-- <td style="background-color: aliceblue;" title="Démarche instaurée et pratiquée régulièrement">
+                        <input type="radio">2 point
+                        </td>
+                        <td style="background-color: aliceblue;" title="Quelques initiatives">
+                        <input type="radio">1 point
+                        </td>
+                        <td style="background-color: aliceblue;" title="Pas du tout">
+                        <input type="radio">0 point
+                        </td> -->
+                  </tr>
+                  <tr >
+                     <td>
+                        Les collaborateurs sont-ils amenés à partager leurs compétences et sous quelles formes ?
+                     </td>
+                     <td>
+                        1
+                     </td>
+                     <td>
+                        Véritable communauté de pratiques mise en place
+                     </td>
+                     <td>
+                        Capitalisation d'un certain nombre de savoirs
+                     </td>
+                     <td>
+                        Aucune initiative
+                     </td>
+                     <!-- <td style="background-color: aliceblue;" title="Démarche instaurée et pratiquée régulièrement">
+                        <input type="radio">2 point
+                        </td>
+                        <td style="background-color: aliceblue;" title="Quelques initiatives">
+                        <input type="radio">1 point
+                        </td>
+                        <td style="background-color: aliceblue;" title="Pas du tout">
+                        <input type="radio">0 point
+                        </td> -->
+                  </tr>
+                  <tr >
+                     <td>
+                        Le mentoring (fonctionnement en binôme) existe-t-il pour assurer le transfert de compétences ?
+                     </td>
+                     <td>
+                        1
+                     </td>
+                     <td>
+                        Systématiquement lors d'une prise de poste
+                     </td>
+                     <td>
+                        Quelques initiatives
+                     </td>
+                     <td>
+                        Aucune initiative
+                     </td>
+                     <!-- <td style="background-color: aliceblue;" title="Démarche instaurée et pratiquée régulièrement">... (6Korestants)
